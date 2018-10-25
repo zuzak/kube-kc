@@ -1,0 +1,48 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: keycloak
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 2
+    type: RollingUpdate
+ template:
+   metadata:
+     labels:
+       name: keycloak
+   spec:
+     containers:
+       - name: keycloak
+         image: jboss/keycloak:4.5.0.Final
+         imagePullPolicy: Always
+         ports:
+           - containerPort: 8080
+             protocol: TCP
+         resources:
+           requests:
+             cpu: 200m
+             memory: 256Mi
+         env:
+           - name: KEYCLOAK_LOGLEVEL
+             value: "DEBUG"
+           - name: KEYCLOAK_USER
+             value: "admin"
+           - name: KEYCLOAK_PASSWORD
+             valueFrom:
+               secretKeyRef:
+                 name: keycloak
+                 key: admin-password
+           - name: DB_VENDOR
+             value: "postgres"
+           - name: DB_PASSWORD
+             valueFrom:
+               secretKeyRef:
+                 name: postgres
+                 key: password

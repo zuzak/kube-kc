@@ -1,0 +1,25 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    name: postgres
+spec:
+  containers:
+    - image: postgres
+      name: postgres
+      volumeMounts:
+        - name: data
+          mountPath: /var/lib/postgresql/data
+          subPath: data
+      env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres
+              key: password
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: data
