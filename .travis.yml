@@ -2,9 +2,7 @@ sudo: required
 services:
   - docker
 env:
-  - K8S_VERSION=1.9.0
-  - MK_VERSION=0.25.2
-  - CHANGE_MINIKUBE_NONE_USER=true
+  - K8S_VERSION=1.9.0 MK_VERSION=0.25.2 CHANGE_MINIKUBE_NONE_USER=true
 before_script:
   - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v$K8S_VERSOIN/bin/linux/amd64/kubectl
   - chmod +x kubectl
